@@ -283,3 +283,13 @@ app.get('/privacy', (req, res) => res.render('privacy'));
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`CS2ZONE Operasyona Hazır: Port ${PORT}`));
+
+app.get('/indir-db', isAuthenticated, (req, res) => {
+    // Sadece admin (ID: 1) indirebilsin (Güvenlik için)
+    if (req.session.user.id === 1) {
+        const file = path.join(__dirname, 'cs2zone.sqlite');
+        res.download(file); 
+    } else {
+        res.send("Bu dosyayı indirme yetkiniz yok komutanım!");
+    }
+});
