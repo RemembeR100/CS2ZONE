@@ -1,0 +1,61 @@
+<footer>
+    <div class="footer-links">
+        <a href="/">Ana Sayfa</a>
+        <a href="/about">Hakkımızda</a>
+        <a href="/privacy">Gizlilik Politikası</a>
+        <a href="/terms">Kullanım Şartları</a>
+    </div>
+    
+    <div style="margin-bottom:30px; font-weight:600; font-size:15px; color:#e2e8f0;">
+        &copy; 2026 CS2ZONE. Tüm hakları saklıdır.
+    </div>
+
+    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 11px; opacity: 0.6; line-height: 1.8; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <div>TR: Bu site Valve Corporation ile bağlı değildir, ilişkilendirilmemiştir veya Valve Corporation tarafından desteklenmemektedir. Counter-Strike, Valve Corporation'ın tescilli ticari markasıdır.</div>
+        <div style="margin-top:5px;">EN: This site is not affiliated with, associated with, or endorsed by Valve Corporation. Counter-Strike is a registered trademark of Valve Corporation.</div>
+    </div>
+</footer>
+
+<% if(locals.user) { %>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>const chatSocket = io();</script>
+
+    <div class="mini-chat-btn" onclick="toggleMiniChat()">
+        <% if(locals.user.avatar && locals.user.avatar !== '/img/default_avatar.png') { %>
+            <img src="<%= locals.user.avatar %>" class="mini-chat-avatar">
+        <% } else { %>
+            <i class="fas fa-comment-dots" style="font-size:30px; color:white;"></i>
+        <% } %>
+        
+        <% if (locals.totalUnread && locals.totalUnread > 0) { %>
+            <div class="badge-float" id="unreadBadge"><%= locals.totalUnread %></div>
+        <% } %>
+    </div>
+
+    <div class="mini-chat-box" id="miniChatBox">
+        <div style="background:var(--primary); padding:20px; color:white; font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+            <span style="display:flex; align-items:center; gap:10px;"><i class="fas fa-comments"></i> Hızlı Sohbet</span>
+            <span onclick="toggleMiniChat()" style="cursor:pointer; font-size:22px; opacity:0.8;">&times;</span>
+        </div>
+        <iframe src="/chat?mode=mini" style="width:100%; height:100%; border:none;"></iframe>
+    </div>
+
+    <script>
+        function toggleMiniChat() {
+            const box = document.getElementById('miniChatBox');
+            const badge = document.getElementById('unreadBadge');
+            
+            if (box.style.display === 'flex') {
+                box.style.display = 'none';
+            } else {
+                box.style.display = 'flex';
+                if (badge) {
+                    badge.style.display = 'none';
+                    chatSocket.emit('clear_notifications', '<%= locals.user.id %>');
+                }
+            }
+        }
+    </script>
+<% } %>
+</body>
+</html>

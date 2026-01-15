@@ -1,0 +1,61 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <div class="profile-header">
+        <div class="profile-cover"></div>
+        <div class="profile-content">
+            <div>
+                <div class="profile-avatar-wrapper">
+                    <img src="<%= user.avatar || '/img/default_avatar.png' %>" class="profile-avatar-img">
+                </div>
+                
+                <div class="profile-details">
+                    <h1><%= user.username %></h1>
+                    <div style="color:var(--text-muted); font-weight: 600; display:flex; gap:15px; align-items:center; margin-top:10px;">
+                        <span><i class="fas fa-hashtag" style="color:var(--primary);"></i> ID: #<%= user.id %></span>
+                        <span style="opacity:0.5;">|</span>
+                        <span><i class="fas fa-shield-alt" style="color:var(--accent);"></i> Ajan</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 30px; padding-top: 30px;">
+                 <button onclick="document.getElementById('editModal').style.display='flex'" class="btn btn-outline">
+                    <i class="fas fa-cog"></i> Profili Düzenle
+                </button>
+
+                <div class="profile-stats-container">
+                    <div class="profile-stat-card">
+                        <span class="profile-stat-val" style="color:var(--primary);"><%= stats.posts %></span>
+                        <span class="profile-stat-label">Operasyon (Konu)</span>
+                    </div>
+                    <div class="profile-stat-card">
+                        <span class="profile-stat-val" style="color:var(--accent);"><%= stats.friends %></span>
+                        <span class="profile-stat-label">Müttefik (Arkadaş)</span>
+                    </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:2000; align-items:center; justify-content:center; backdrop-filter:blur(10px);">
+    <div class="card" style="width:450px; border: 2px solid var(--border);">
+        <div style="display:flex; justify-content:space-between; margin-bottom:30px; align-items:center;">
+            <h2 style="margin:0;">Profili Düzenle</h2>
+            <button onclick="document.getElementById('editModal').style.display='none'" style="background:none; border:none; color:var(--text-muted); font-size:24px; cursor:pointer;"><i class="fas fa-times"></i></button>
+        </div>
+        <form action="/update-profile" method="POST" enctype="multipart/form-data">
+            <div style="margin-bottom:20px;">
+                <label style="font-weight:600; margin-bottom:10px; display:block;">Kullanıcı Adı</label>
+                <input type="text" name="newUsername" value="<%= user.username %>" required style="margin:0;">
+            </div>
+            <div style="margin-bottom:30px;">
+                 <label style="font-weight:600; margin-bottom:10px; display:block;">Yeni Avatar Yükle</label>
+                <input type="file" name="avatarFile" style="padding:12px; margin:0; background:var(--bg-darker);">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Değişiklikleri Kaydet</button>
+        </form>
+    </div>
+</div>
+<%- include('partials/footer') %>

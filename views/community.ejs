@@ -1,0 +1,93 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <div class="grid-2">
+        <div>
+            <div class="card">
+                <h3 style="margin-top:0; border-bottom:1px solid var(--border); padding-bottom:15px; margin-bottom:20px;">
+                    <i class="fas fa-stream" style="color:var(--primary);"></i> Kategoriler
+                </h3>
+                <div class="sidebar-menu" style="display:flex; flex-direction:column; gap:10px;">
+                    <a href="/community?cat=Hepsi" class="category-link <%= currentCat === 'Hepsi' ? 'active' : '' %>">
+                        <i class="fas fa-globe"></i> Hepsi
+                    </a>
+                    <% const cats = [
+                        {n:'Genel', i:'fa-comments'}, {n:'Taktik', i:'fa-chess-board'}, {n:'Ekip', i:'fa-users'},
+                        {n:'Piyasa', i:'fa-coins'}, {n:'Bug', i:'fa-bug'}, {n:'Teknik', i:'fa-cogs'},
+                        {n:'Espor', i:'fa-trophy'}, {n:'Mizah', i:'fa-laugh'}, {n:'Şikayet', i:'fa-bullhorn'},
+                        {n:'Donanım', i:'fa-desktop'}
+                    ]; %>
+                    <% cats.forEach(cat => { %>
+                    <a href="/community?cat=<%= cat.n %>" class="category-link <%= currentCat === cat.n ? 'active' : '' %>">
+                        <i class="fas <%= cat.i %>"></i> <%= cat.n %>
+                    </a>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="card search-container">
+                <form action="/community" method="GET" style="flex:1; display:flex; gap:10px; margin:0;">
+                    <% if(currentCat && currentCat !== 'Hepsi') { %> <input type="hidden" name="cat" value="<%= currentCat %>"> <% } %>
+                    <input type="text" name="q" placeholder="Konu başlıklarında ara..." value="<%= typeof currentQ !== 'undefined' ? currentQ : '' %>" style="margin:0; background:rgba(0,0,0,0.4); border-color:var(--primary);">
+                    <button type="submit" class="btn btn-primary" style="padding:0 25px;"><i class="fas fa-search"></i></button>
+                </form>
+
+                <% if(locals.user) { %>
+                <div style="display:flex; align-items:center; gap:15px;">
+                     <img src="<%= user.avatar %>" style="width:45px; height:45px; border-radius:50%; border:2px solid var(--primary); box-shadow: 0 0 10px rgba(59,130,246,0.3); object-fit:cover;">
+                     <button onclick="document.getElementById('newPostModal').style.display='flex'" class="btn btn-primary" style="box-shadow:0 0 15px rgba(59,130,246,0.4);">
+                        <i class="fas fa-plus"></i> Yeni Konu
+                    </button>
+                </div>
+                <% } %>
+            </div>
+
+            <% if(posts.length === 0) { %>
+                <div class="card" style="text-align:center; padding:40px; opacity:0.7;">
+                    <i class="fas fa-inbox" style="font-size:40px; margin-bottom:15px;"></i>
+                    <p>Kriterlere uygun konu bulunamadı.</p>
+                </div>
+            <% } %>
+
+            <% posts.forEach(post => { %>
+                <div class="card" style="padding:25px; display:flex; gap:20px; transition:0.3s; cursor:pointer;" onclick="window.location.href='/post/<%= post.id %>'">
+                    <img src="<%= post.authorAvatar || '/img/default_avatar.png' %>" style="width:50px; height:50px; border-radius:50%; border:2px solid var(--border); object-fit:cover;">
+                    <div style="flex:1;">
+                        <h3 style="margin:0 0 10px 0; font-size:18px;"><%= post.title %></h3>
+                        <p style="margin:0 0 15px 0; opacity:0.7; font-size:14px; line-height:1.5; max-height:42px; overflow:hidden;"><%= post.content.substring(0, 120) %>...</p>
+                        <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--text-muted); font-weight:600;">
+                            <div>
+                                <span style="color:var(--primary); margin-right:10px;"><i class="fas fa-user"></i> <%= post.author %></span>
+                                <span style="background:rgba(59,130,246,0.1); color:var(--primary); padding:4px 10px; border-radius:20px; border:1px solid var(--primary);"><%= post.category %></span>
+                            </div>
+                            <div>
+                                <i class="fas fa-comment"></i> <%= post.commentCount %>
+                                <i class="fas fa-clock" style="margin-left:10px;"></i> <%= new Date(post.created_at).toLocaleDateString('tr-TR') %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
+
+<div id="newPostModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:2000; align-items:center; justify-content:center; backdrop-filter:blur(10px);">
+    <div class="card" style="width:500px; border: 2px solid var(--primary); box-shadow:0 0 30px rgba(59,130,246,0.3);">
+        <div style="display:flex; justify-content:space-between; margin-bottom:30px; align-items:center;">
+            <h2 style="margin:0;">Yeni Konu Oluştur</h2>
+            <button onclick="document.getElementById('newPostModal').style.display='none'" style="background:none; border:none; color:var(--text-muted); font-size:24px; cursor:pointer;"><i class="fas fa-times"></i></button>
+        </div>
+        <form action="/community/new" method="POST">
+            <input type="text" name="title" placeholder="Konu Başlığı" required style="background:rgba(0,0,0,0.5);">
+            <select name="category" style="background:rgba(0,0,0,0.5);">
+                <% cats.forEach(cat => { %><option value="<%= cat.n %>"><%= cat.n %></option><% }) %>
+            </select>
+            <textarea name="content" placeholder="İçerik..." rows="5" required style="background:rgba(0,0,0,0.5);"></textarea>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Yayınla</button>
+        </form>
+    </div>
+</div>
+<%- include('partials/footer') %>

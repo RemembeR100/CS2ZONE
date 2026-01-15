@@ -1,0 +1,65 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <div style="text-align:center; padding: 40px 0;">
+        <h1 style="font-size:3rem; margin-bottom:10px;">Pro <span style="color:var(--primary)">Config</span> Veritabanı</h1>
+        <p style="color:var(--text-muted);">Dünyanın en iyi oyuncularının güncel ayarları.</p>
+        
+        <div style="max-width:500px; margin:30px auto; position:relative;">
+            <input type="text" id="searchBox" placeholder="Oyuncu veya Takım Ara..." style="padding:15px 20px; font-size:1.1rem; border-radius:50px; padding-left:50px;">
+            <i class="fas fa-search" style="position:absolute; left:20px; top:50%; transform:translateY(-50%); color:var(--text-muted);"></i>
+        </div>
+    </div>
+
+    <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:25px;">
+        <% if(players && players.length > 0) { %>
+            <% players.forEach(p => { %>
+                <div class="player-card" data-name="<%= p.nick.toLowerCase() %> <%= p.team.toLowerCase() %>">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <h2 style="margin:0; font-size:1.8rem;"><%= p.nick %></h2>
+                        <span style="background:rgba(255,255,255,0.05); padding:4px 10px; border-radius:6px; font-size:12px; font-weight:bold; border:1px solid var(--border);"><%= p.team %></span>
+                    </div>
+                    
+                    <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:8px; margin-bottom:15px; font-size:13px;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                            <span style="color:var(--text-muted);">DPI</span>
+                            <strong><%= p.mouse.dpi %></strong>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                            <span style="color:var(--text-muted);">Sens</span>
+                            <strong><%= p.mouse.sens %></strong>
+                        </div>
+                        <div style="display:flex; justify-content:space-between;">
+                            <span style="color:var(--text-muted);">Res</span>
+                            <strong><%= p.video.res %></strong>
+                        </div>
+                    </div>
+
+                    <button onclick="copyCode('<%= p.cross %>')" class="btn btn-outline" style="width:100%; justify-content:center;">
+                        <i class="fas fa-crosshairs"></i> Crosshair Kopyala
+                    </button>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div style="grid-column: 1/-1; text-align:center; padding:50px; color:var(--text-muted);">
+                Veri yüklenemedi. `data/players.js` dosyasını kontrol et komutanım.
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<script>
+    document.getElementById('searchBox').addEventListener('keyup', function(e){
+        const val = e.target.value.toLowerCase();
+        document.querySelectorAll('.player-card').forEach(card => {
+            const name = card.getAttribute('data-name');
+            card.style.display = name.includes(val) ? 'block' : 'none';
+        });
+    });
+
+    function copyCode(code) {
+        navigator.clipboard.writeText(code);
+        alert('Crosshair kopyalandı asker!');
+    }
+</script>
+<%- include('partials/footer') %>

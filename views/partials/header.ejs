@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS2ZONE</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Navigasyon aktif link stili (değişmedi) */
+        nav a.active { color: white !important; background: rgba(59, 130, 246, 0.2); border: 1px solid var(--primary); box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            <span class="logo-text-part">CS</span>
+            <span class="logo-two-animated">2</span>
+            <span class="logo-text-part">ZONE</span>
+        </a>
+        
+        <nav>
+            <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>"><i class="fas fa-home"></i> Ana Sayfa</a>
+            <a href="/prohub" class="<%= currentPath === '/prohub' ? 'active' : '' %>"><i class="fas fa-crosshairs"></i> ProHub</a>
+            <a href="/community" class="<%= currentPath && currentPath.includes('/community') ? 'active' : '' %>"><i class="fas fa-comments"></i> Topluluk</a>
+            <% if(locals.user) { %>
+                <a href="/friends" class="<%= currentPath === '/friends' ? 'active' : '' %>"><i class="fas fa-user-group"></i> Tim & Arkadaşlar</a>
+                <a href="/chat" class="<%= currentPath === '/chat' ? 'active' : '' %>"><i class="fas fa-envelope"></i> Mesajlar</a>
+            <% } %>
+        </nav>
+        
+        <div>
+            <% if(locals.user) { %>
+                <a href="/profile" class="btn btn-outline" style="margin-right:10px; border-color:var(--primary); background:rgba(59,130,246,0.1);">
+                    <img src="<%= user.avatar || '/img/default_avatar.png' %>" style="width:20px; height:20px; border-radius:50%; margin-right:5px; vertical-align:middle; object-fit:cover;"> 
+                    <%= user.username %>
+                </a>
+                <a href="/logout" onclick="return confirm('Operasyondan ayrılıyor musun?')" class="btn btn-danger" style="border-color:var(--danger); background:rgba(239,68,68,0.1);"><i class="fas fa-power-off"></i></a>
+            <% } else { %>
+                <a href="/login" style="color:white; margin-right:20px; text-decoration:none; font-weight:700; font-size:14px;">Giriş Yap</a>
+                <a href="/register" class="btn btn-primary">Kayıt Ol</a>
+            <% } %>
+        </div>
+    </header>

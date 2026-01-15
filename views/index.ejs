@@ -1,0 +1,41 @@
+<%- include('partials/header') %>
+
+<div style="text-align:center; padding:100px 20px;">
+    <h1 style="font-size:4rem; margin-bottom:10px; font-weight:900; letter-spacing:-2px;">CS<span style="color:#3b82f6;">2</span>ZONE</h1>
+    <p style="font-size:1.2rem; color:rgba(255,255,255,0.7);">Türkiye'nin en gelişmiş oyuncu topluluğu</p>
+</div>
+
+<div class="container" style="margin-top:-50px;">
+    <div class="grid-3" style="max-width:900px; margin:0 auto 60px auto;">
+        <div class="card" style="border:2px solid var(--primary); text-align:center;">
+            <i class="fas fa-users" style="color:var(--primary); font-size:2rem; margin-bottom:10px;"></i>
+            <h2 style="font-size:3rem; margin:0; color:white;"><%= stats.users %></h2>
+            <div style="color:var(--text-muted); font-weight:bold; letter-spacing:1px;">KAYITLI OPERATÖR</div>
+        </div>
+        <div class="card" style="border:2px solid #10b981; text-align:center;">
+            <i class="fas fa-signal" style="color:#10b981; font-size:2rem; margin-bottom:10px;"></i>
+            <h2 style="font-size:3rem; margin:0; color:white;"><%= stats.online %></h2>
+            <div style="color:var(--text-muted); font-weight:bold; letter-spacing:1px;">ÇEVRİMİÇİ</div>
+        </div>
+        <div class="card" style="border:2px solid var(--accent); text-align:center;">
+            <i class="fas fa-comments" style="color:var(--accent); font-size:2rem; margin-bottom:10px;"></i>
+            <h2 style="font-size:3rem; margin:0; color:white;"><%= stats.posts %></h2>
+            <div style="color:var(--text-muted); font-weight:bold; letter-spacing:1px;">KONU</div>
+        </div>
+    </div>
+
+    <h2 style="margin-bottom:20px;">Son Konular</h2>
+    <div class="grid-3">
+        <% recentPosts.forEach(post => { %>
+            <div class="card" style="cursor:pointer; transition:0.3s;" onclick="window.location='/post/<%= post.id %>'">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span style="background:rgba(59,130,246,0.1); color:var(--primary); padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold;"><%= post.category %></span>
+                </div>
+                <h3 style="margin:0 0 10px 0; font-size:1.2rem;"><%= post.title %></h3>
+                <div style="font-size:12px; color:var(--text-muted);">Gönderen: <%= post.author %></div>
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

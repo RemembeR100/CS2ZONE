@@ -1,0 +1,176 @@
+<% if (!isMini) { %> 
+    <%- include('partials/header') %> 
+<% } else { %>
+    <!DOCTYPE html>
+    <html lang="tr">
+    <head>
+        <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Chat</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style> 
+            body { background: #0b1120 !important; background-image: none !important; overflow: hidden; padding: 0; margin: 0; font-family: 'Inter', sans-serif; color: #f1f5f9; }
+            .container { max-width: 100%; height: 100vh; margin: 0; padding: 0; }
+            .chat-layout { display: grid; grid-template-columns: 80px 1fr; height: 100vh; border: none; background: #0b1120; border-radius:0; box-shadow:none; } 
+            .chat-sidebar { padding: 10px 5px; text-align: center; background: #050911; border-right: 1px solid rgba(255,255,255,0.05); overflow-y:auto; } 
+            .section-title, .channel-name, .team-members-list { display: none; } /* Mini modda isimleri gizle */
+            .chat-channel-box { justify-content: center; padding: 10px; border-radius: 10px; margin-bottom:5px; border:none; background:transparent; }
+            .chat-channel-box:hover, .chat-channel-box.active { background: rgba(59,130,246,0.15); }
+            .channel-icon { margin:0; width:40px; height:40px; font-size:18px; }
+            .chat-main { display: flex; flex-direction: column; background: #0b1120; }
+            .chat-header { padding: 10px; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); background: #080c17; font-weight: 700; display:flex; justify-content:space-between; align-items:center; }
+            .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+            .chat-input-area { padding: 10px; border-top: 1px solid rgba(255,255,255,0.1); background: #080c17; display: flex; gap: 5px; align-items: center; }
+            #msgInput { font-size: 12px; padding: 8px; border-radius:50px; border:none; background:rgba(255,255,255,0.1); color:white; flex:1; }
+            .btn-send { width:35px; height:35px; border-radius:50%; background:#3b82f6; border:none; color:white; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+            .badge-float { top: 0; right: 0; width: 18px; height: 18px; font-size: 10px; border: 2px solid #050911; position:absolute; background:red; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:white; }
+            .msg { padding: 8px 12px; border-radius: 12px; max-width: 85%; font-size: 12px; word-wrap: break-word; }
+            .msg-mine { align-self: flex-end; background: #3b82f6; border-bottom-right-radius: 2px; }
+            .msg-other { align-self: flex-start; background: #1e293b; border-bottom-left-radius: 2px; }
+            .msg-meta { font-size: 9px; opacity: 0.6; margin-bottom: 2px; display: flex; justify-content: space-between; }
+        </style>
+    </head>
+    <body>
+<% } %>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<div class="container">
+    <div class="chat-layout">
+        <div class="chat-sidebar">
+            
+            <% if (!isMini) { %><div style="font-size:10px; font-weight:800; color:#64748b; margin-bottom:10px; padding-left:10px;">KANALLAR</div><% } %>
+            <div onclick="joinRoom('global')" class="chat-channel-box active" title="Global">
+                <div class="channel-info">
+                    <div class="channel-icon" style="color:var(--primary); background:rgba(59,130,246,0.1);"><i class="fas fa-globe"></i></div>
+                    <span class="channel-name">Global Karargah</span>
+                </div>
+            </div>
+            
+            <% if (groups.length > 0) { %>
+                <% if (!isMini) { %><div style="font-size:10px; font-weight:800; color:#64748b; margin:20px 0 10px 0; padding-left:10px;">TİMLERİM</div><% } %>
+                
+                <% groups.forEach(g => { %>
+                    <div onclick="joinRoom('group_<%= g.id %>', '<%= g.name %>')" class="chat-channel-box" title="<%= g.name %>">
+                        <div class="channel-info">
+                            <div class="channel-icon" style="color:#f59e0b; background:rgba(245, 158, 11, 0.1);"><i class="fas fa-shield-alt"></i></div>
+                            <span class="channel-name"><%= g.name %></span>
+                        </div>
+                    </div>
+
+                    <% if (!isMini && g.members && g.members.length > 0) { %>
+                        <div class="team-members-list">
+                            <% g.members.forEach(m => { %>
+                                <div class="team-member-item">
+                                    <img src="<%= m.avatar || '/img/default_avatar.png' %>" class="team-member-avatar">
+                                    <span><%= m.username %></span>
+                                </div>
+                            <% }) %>
+                        </div>
+                    <% } %>
+                <% }) %>
+            <% } %>
+
+            <% if (!isMini) { %><div style="font-size:10px; font-weight:800; color:#64748b; margin:20px 0 10px 0; padding-left:10px;">AJANLAR (ÖZEL)</div><% } %>
+            
+            <% friends.forEach(f => { %>
+                <div onclick="joinPrivate('<%= user.id %>', '<%= f.id %>', '<%= f.username %>', this)" class="chat-channel-box" style="position:relative;" title="<%= f.username %>">
+                    <div class="channel-info">
+                        <img src="<%= f.avatar || '/img/default_avatar.png' %>" class="channel-icon" style="object-fit:cover; padding:0;">
+                        <span class="channel-name"><%= f.username %></span>
+                    </div>
+                    <% if(f.unread > 0) { %> <div class="badge-float"><%= f.unread %></div> <% } %>
+                </div>
+            <% }) %>
+        </div>
+
+        <div class="chat-main">
+            <div class="chat-header">
+                <span id="roomTitle" style="display:flex; align-items:center; gap:10px; font-size:15px;">
+                    <i class="fas fa-globe" style="color:var(--primary);"></i> Global Karargah
+                </span>
+                <% if (!isMini) { %><span style="font-size:10px; font-weight:700; color:#10b981; background:rgba(16, 185, 129, 0.1); padding:4px 10px; border-radius:20px;">CANLI</span><% } %>
+            </div>
+            
+            <div id="messages" class="chat-messages"></div>
+
+            <div class="chat-input-area">
+                <% if (!isMini) { %>
+                <img src="<%= user.avatar || '/img/default_avatar.png' %>" style="width:35px; height:35px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,0.1);">
+                <% } %>
+                <input type="text" id="msgInput" placeholder="Mesaj..." onkeypress="handleEnter(event)">
+                <button onclick="sendMsg()" class="btn-send"><i class="fas fa-paper-plane" style="font-size:14px;"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const socket = io();
+    const myId = "<%= user.id %>"; 
+    const myName = "<%= user.username %>";
+    const myAvatar = "<%= user.avatar || '/img/default_avatar.png' %>";
+    let currentRoom = 'global';
+
+    joinRoom('global');
+
+    function joinRoom(room, name) {
+        currentRoom = room;
+        document.querySelectorAll('.chat-channel-box').forEach(el => el.classList.remove('active'));
+        if(event && event.currentTarget) event.currentTarget.classList.add('active');
+        
+        document.getElementById('messages').innerHTML = '';
+        
+        const isGroup = room.startsWith('group');
+        const isGlobal = room === 'global';
+        const iconClass = isGlobal ? 'fa-globe' : (isGroup ? 'fa-shield-alt' : 'fa-user-secret');
+        const color = isGlobal ? 'var(--primary)' : (isGroup ? '#f59e0b' : '#10b981');
+        const titleText = name ? name : (isGlobal ? 'Global Karargah' : 'Özel Mesaj');
+        
+        document.getElementById('roomTitle').innerHTML = `<i class="fas ${iconClass}" style="color:${color};"></i> ${titleText}`;
+        
+        socket.emit('join_room', room);
+    }
+
+    function joinPrivate(u1, u2, name, el) {
+        const room = [u1, u2].sort().join('-');
+        joinRoom(room, name);
+        if(el) { const badge = el.querySelector('.badge-float'); if(badge) badge.style.display = 'none'; }
+    }
+
+    function sendMsg() {
+        const input = document.getElementById('msgInput');
+        if(!input.value.trim()) return;
+        socket.emit('send_message', { room: currentRoom, sender_id: parseInt(myId), author: myName, avatar: myAvatar, message: input.value });
+        input.value = '';
+    }
+
+    function handleEnter(e) { if(e.key === 'Enter') sendMsg(); }
+
+    function appendMessage(data) {
+        const div = document.createElement('div');
+        const isMe = data.sender_id == myId;
+        div.className = `msg ${isMe ? 'msg-mine' : 'msg-other'}`;
+        const time = new Date(data.created_at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        let avatarHtml = '';
+        if (!isMe) {
+            avatarHtml = `<img src="${data.sender_avatar || '/img/default_avatar.png'}" style="width:24px; height:24px; border-radius:50%; position:absolute; left:-30px; bottom:0;">`;
+        }
+
+        div.innerHTML = `
+            ${avatarHtml}
+            <div class="msg-meta">
+                <span style="font-weight:bold;">${isMe ? 'Ben' : (data.author || data.sender_name)}</span>
+                <span>${time}</span>
+            </div>
+            <div>${data.message}</div>
+        `;
+        const box = document.getElementById('messages');
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    socket.on('receive_message', appendMessage);
+    socket.on('load_history', (msgs) => msgs.forEach(appendMessage));
+</script>
+
+<% if (!isMini) { %> <%- include('partials/footer') %> <% } else { %> </body></html> <% } %>

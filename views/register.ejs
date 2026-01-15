@@ -1,0 +1,36 @@
+<%- include('partials/header') %>
+<style>
+    body { background: #0b0f19 url('/img/anasayfa.png') no-repeat center center/cover; }
+    .auth-card {
+        background: rgba(17, 22, 37, 0.9); backdrop-filter: blur(10px);
+        width: 100%; max-width: 450px; padding: 40px; border-radius: 15px;
+        border: 1px solid #1f293a; margin: 60px auto; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    .auth-input { width: 100%; background: #0b0f19; border: 1px solid #333; color: white; padding: 12px; margin-bottom: 15px; border-radius: 6px; }
+    .btn-submit { width: 100%; background: transparent; border: 2px solid #8ec5fc; color: #8ec5fc; font-weight: bold; padding: 12px; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+    .btn-submit:hover { background: #8ec5fc; color: black; }
+</style>
+
+<div class="container">
+    <div class="auth-card">
+        <h2 style="color:white; text-align:center; margin-bottom:30px;">ARAMIZA KATIL</h2>
+        <% if (locals.error) { %> <div style="background:rgba(255,0,0,0.2); color:#ff6b6b; padding:10px; border-radius:5px; margin-bottom:15px; text-align:center;"><%= error %></div> <% } %>
+        
+        <form action="/register" method="POST">
+            <input type="text" name="username" class="auth-input" placeholder="Kullanıcı Adı (Nick)" required>
+            <input type="email" name="email" class="auth-input" placeholder="E-Posta Adresi" required>
+            <input type="password" name="password" class="auth-input" placeholder="Şifre" required>
+            
+            <% if (locals.n1) { %>
+            <div style="display:flex; gap:10px; align-items:center; margin-bottom:15px; background:#111; padding:10px; border-radius:6px;">
+                <span style="color:#8ec5fc; font-weight:bold;">Güvenlik: <%= n1 %> + <%= n2 %> = ?</span>
+                <input type="number" name="captcha" class="auth-input" style="margin:0; width:60px; text-align:center;" required>
+            </div>
+            <% } %>
+
+            <button type="submit" class="btn-submit">KAYIT OL</button>
+        </form>
+        <p style="text-align:center; color:#666; margin-top:20px; font-size:13px;">Zaten askersin? <a href="/login" style="color:#8ec5fc;">Giriş Yap</a></p>
+    </div>
+</div>
+<%- include('partials/footer') %>
