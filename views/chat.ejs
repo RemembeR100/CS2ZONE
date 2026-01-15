@@ -26,6 +26,8 @@
             .msg-mine { align-self: flex-end; background: #3b82f6; border-bottom-right-radius: 2px; }
             .msg-other { align-self: flex-start; background: #1e293b; border-bottom-left-radius: 2px; }
             .msg-meta { font-size: 9px; opacity: 0.6; margin-bottom: 2px; display: flex; justify-content: space-between; }
+            /* DÜZELTME: Mini moddaki resimler için garanti */
+            img { object-fit: cover !important; }
         </style>
     </head>
     <body>
@@ -58,7 +60,7 @@
                         <div class="team-members-list">
                             <% g.members.forEach(m => { %>
                                 <div class="team-member-item">
-                                    <img src="<%= m.avatar || '/img/default_avatar.png' %>" class="team-member-avatar-small">
+                                    <img src="<%= m.avatar || '/img/default_avatar.png' %>" class="team-member-avatar-small" style="object-fit:cover;">
                                     <span><%= m.username %></span>
                                 </div>
                             <% }) %>
@@ -89,7 +91,7 @@
             <div id="messages" class="chat-messages"></div>
             <div class="chat-input-area">
                 <% if (!isMini) { %>
-                <img src="<%= user.avatar || '/img/default_avatar.png' %>">
+                <img src="<%= user.avatar || '/img/default_avatar.png' %>" style="object-fit:cover;">
                 <% } %>
                 <input type="text" id="msgInput" placeholder="Mesajınızı yazın..." onkeypress="handleEnter(event)">
                 <button onclick="sendMsg()" class="btn-send"><i class="fas fa-paper-plane" style="font-size:14px;"></i></button>
@@ -146,7 +148,8 @@
         
         let avatarHtml = '';
         if (!isMe) {
-            avatarHtml = `<img src="${data.sender_avatar || '/img/default_avatar.png'}" style="width:24px; height:24px; border-radius:50%; position:absolute; left:-30px; bottom:0;">`;
+            // DÜZELTME 4: Mesajın yanındaki küçük avatar
+            avatarHtml = `<img src="${data.sender_avatar || '/img/default_avatar.png'}" style="width:24px; height:24px; border-radius:50%; position:absolute; left:-30px; bottom:0; object-fit:cover;">`;
         }
 
         div.innerHTML = `${avatarHtml}<div class="msg-meta"><span style="font-weight:bold;">${isMe ? 'Ben' : (data.author || data.sender_name)}</span><span>${time}</span></div><div>${data.message}</div>`;

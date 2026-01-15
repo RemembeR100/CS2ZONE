@@ -18,59 +18,98 @@ body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; heigh
 
 .container { max-width: 1200px; margin: 40px auto; padding: 0 30px; width: 100%; box-sizing: border-box; flex: 1; }
 
-/* HEADER */
-header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-
-/* Logo Tasarımı */
-.logo { 
-    font-family: 'Montserrat', sans-serif; 
-    font-size: 32px; 
-    font-weight: 900; 
-    text-decoration: none; 
-    display: flex; align-items: center; 
-    letter-spacing: -1px; text-transform: uppercase; gap: 5px;
-    transform: skewX(-10deg);
+/* --- HEADER DÜZENİ (BUTON HİZALAMA DÜZELTİLDİ) --- */
+header { 
+    background: var(--bg-card); border-bottom: 1px solid var(--border); 
+    padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; 
+    position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.5); 
 }
+
+.header-right {
+    display: flex; align-items: center; gap: 10px; /* Butonlar arası boşluk */
+}
+
+/* Profil ve Çıkış Butonlarını Eşitleme */
+.header-btn-profile, .header-btn-logout {
+    height: 42px; /* İkisi de aynı yükseklikte */
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50px; border: 1px solid;
+    transition: 0.3s; text-decoration: none;
+    font-weight: 700; font-size: 14px;
+    box-sizing: border-box; /* Padding taşmasını engelle */
+}
+
+.header-btn-profile {
+    padding: 0 20px; /* Yanlardan boşluk */
+    background: rgba(59,130,246,0.1); color: white; border-color: var(--primary);
+    gap: 10px;
+}
+
+.header-btn-logout {
+    width: 42px; /* Tam kare/yuvarlak */
+    padding: 0; /* İç boşluk yok, ikon ortalansın */
+    background: rgba(239,68,68,0.1); color: #fca5a5; border-color: var(--danger);
+}
+
+.header-btn-profile:hover { background: var(--primary); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+.header-btn-logout:hover { background: var(--danger); color: white; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+
+.logo { font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 900; text-decoration: none; display: flex; align-items: center; letter-spacing: -1px; text-transform: uppercase; gap: 5px; transform: skewX(-10deg); }
 .logo-text-part { color: #e2e8f0; text-shadow: 0 0 5px rgba(226, 232, 240, 0.5); }
-.logo-two-animated {
-    font-size: 38px; color: var(--primary); font-style: italic; font-weight: 900; display: inline-block; margin: 0 2px;
-    animation: pulse-neon 2s infinite ease-in-out;
-    text-shadow: 0 0 10px var(--primary), 2px 2px 0px #000;
-}
-
+.logo-two-animated { font-size: 38px; color: var(--primary); font-style: italic; font-weight: 900; display: inline-block; margin: 0 2px; animation: pulse-neon 2s infinite ease-in-out; text-shadow: 0 0 10px var(--primary), 2px 2px 0px #000; }
 nav a { color: var(--text-muted); text-decoration: none; padding: 10px 18px; font-weight: 600; font-size:14px; transition:0.3s; border-radius: var(--radius-md); }
 nav a:hover, nav a.active { color: white; background: rgba(255,255,255,0.06); }
 
-/* KARTLAR VE IZGARA YAPISI */
+/* --- RESİM BOYUTLANDIRMA (DEV RESİM BUG FIX - KESİN ÇÖZÜM) --- */
+/* Bu kodlar, resimlerin ait olduğu kutudan taşmasını engeller */
+
+/* 1. Header Profil Resmi */
+.header-avatar-small { width: 24px !important; height: 24px !important; border-radius: 50%; object-fit: cover; }
+
+/* 2. Sol Menü (Sidebar) Büyük Profil Resmi */
+.sidebar-profile-img { 
+    width: 80px !important; height: 80px !important; 
+    border-radius: 50%; object-fit: cover; 
+    border: 3px solid var(--primary); 
+    display: block; /* Satır içi davranışı engelle */
+}
+
+/* 3. Arkadaş Listesi Küçük Resimler */
+.friend-avatar { 
+    width: 50px !important; height: 50px !important; 
+    border-radius: 50%; object-fit: cover; 
+    border: 2px solid var(--primary); margin-bottom: 10px; 
+}
+
+/* 4. Chat Sol Menü Resimleri */
+.chat-sidebar img, .channel-icon img {
+    width: 32px !important; height: 32px !important;
+    max-width: 32px !important; max-height: 32px !important;
+    border-radius: 50%; object-fit: cover;
+}
+
+/* 5. Chat Mesaj Yazma Alanı Resmi */
+.chat-input-area img {
+    width: 40px !important; height: 40px !important;
+    border-radius: 50%; object-fit: cover;
+}
+
+/* 6. Arama Sonuçları Resmi */
+.search-result-img {
+    width: 35px !important; height: 35px !important;
+    border-radius: 50%; object-fit: cover;
+}
+
+/* KARTLAR */
 .card { background: var(--bg-card) !important; border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 30px; margin-bottom: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.7); position: relative; z-index: 1; }
 .grid-2 { display: grid; grid-template-columns: 280px 1fr; gap: 35px; }
 .grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
 
-/* TOPLULUK SAYFASI BİLEŞENLERİ */
-.category-link {
-    display: flex; align-items: center; gap: 12px;
-    background: var(--bg-floating);
-    padding: 12px 18px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    text-decoration: none;
-    font-weight: 700; font-size: 14px;
-    transition: all 0.3s ease;
-}
-.category-link i { width: 20px; text-align: center; }
+/* DİĞER BİLEŞENLER (V24 ile aynı) */
+.category-link { display: flex; align-items: center; gap: 12px; background: var(--bg-floating); padding: 12px 18px; border-radius: var(--radius-md); border: 1px solid var(--border); color: var(--text-muted); text-decoration: none; font-weight: 700; font-size: 14px; transition: all 0.3s ease; }
 .category-link:hover { background: var(--bg-darker); color: white; border-color: var(--primary); transform: translateX(5px); box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
 .category-link.active { background: rgba(59, 130, 246, 0.15) !important; color: white !important; border-color: var(--primary) !important; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
-
-.search-container {
-    display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 20px;
-    background: linear-gradient(to right, var(--bg-floating), var(--bg-card));
-    border: 1px solid var(--primary);
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
-}
-
-/* PROFIL SAYFASI */
-.sidebar-profile-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3); flex-shrink: 0; background: #000; }
+.search-container { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 20px; background: linear-gradient(to right, var(--bg-floating), var(--bg-card)); border: 1px solid var(--primary); box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
 .profile-header { position: relative; border-radius: var(--radius-xl); overflow: hidden; background: var(--bg-card); border: 1px solid var(--border); }
 .profile-cover { height: 240px; background: linear-gradient(to bottom, var(--primary-dark), #0f172a); }
 .profile-content { padding: 0 40px 40px 40px; position: relative; display: flex; justify-content: space-between; align-items: flex-end; }
@@ -79,106 +118,45 @@ nav a:hover, nav a.active { color: white; background: rgba(255,255,255,0.06); }
 .profile-details { margin-top: 15px; }
 .profile-stats-container { display: flex; gap: 15px; }
 .profile-stat-card { background: var(--bg-floating); padding: 15px 25px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border); flex: 1; transition: 0.3s; }
-.profile-stat-card:hover { transform: translateY(-5px); border-color: var(--primary); }
 .profile-stat-val { font-size: 24px; font-weight: 900; display: block; }
 .profile-stat-label { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 5px; }
-
-/* YAN MENÜ KARTLARI (ARKADAŞLAR) */
 .sidebar-item-card { display: flex; justify-content: space-between; align-items: center; background: var(--bg-floating) !important; padding: 15px 20px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px; transition: 0.3s; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 .sidebar-item-card:hover { background: #2d3748 !important; border-color: var(--primary); transform: translateX(5px); }
 .sidebar-item-title { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 10px; }
 .sidebar-item-badge { font-size: 11px; font-weight: 600; background: rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 20px; }
-
-/* CHAT BÖLÜMÜ */
-.chat-layout { 
-    display: grid; grid-template-columns: 280px 1fr; height: 78vh; 
-    border: 1px solid var(--border); border-radius: var(--radius-xl); 
-    overflow: hidden; 
-    background: var(--bg-darker) !important; 
-    box-shadow: 0 30px 60px rgba(0,0,0,0.8); 
-    position: relative; z-index: 10; 
-}
-
-.chat-sidebar { 
-    background: #050911 !important; 
-    border-right: 1px solid var(--border); 
-    padding: 20px 15px; 
-    overflow-y: auto; 
-}
-
-/* Chat Sidebar Resim Sınırlaması */
-.chat-sidebar img {
-    max-width: 40px !important;
-    max-height: 40px !important;
-    object-fit: cover;
-    border-radius: 50%;
-}
-
+.chat-layout { display: grid; grid-template-columns: 280px 1fr; height: 78vh; border: 1px solid var(--border); border-radius: var(--radius-xl); overflow: hidden; background: var(--bg-darker) !important; box-shadow: 0 30px 60px rgba(0,0,0,0.8); position: relative; z-index: 10; }
+.chat-sidebar { background: #050911 !important; border-right: 1px solid var(--border); padding: 20px 15px; overflow-y: auto; }
 .chat-main { display: flex; flex-direction: column; background: #0b1120 !important; }
 .chat-header { padding: 20px 30px; border-bottom: 1px solid var(--border); font-weight: 700; display: flex; justify-content: space-between; align-items: center; background: #080c17 !important; }
 .chat-messages { flex: 1; padding: 30px 35px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
-.chat-input-area { padding: 20px 30px; border-top: 1px solid var(--border); background: #080c17 !important; display: flex; gap: 15px; align-items: center; }
-.chat-input-area img { width: 40px !important; height: 40px !important; border-radius: 50%; object-fit: cover; }
-
 .msg { padding: 15px 22px; border-radius: 20px; max-width: 75%; font-size: 14px; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 .msg-mine { align-self: flex-end; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border-bottom-right-radius: 4px; }
 .msg-other { align-self: flex-start; background: #1f2937; color: var(--text-main); border-bottom-left-radius: 4px; border: 1px solid var(--border); }
 .msg-meta { font-size: 11px; opacity: 0.5; margin-bottom: 8px; display: flex; justify-content: space-between; font-weight: 600; }
-
-/* Chat Kanal Kutuları */
-.chat-channel-box {
-    display: flex; align-items: center; justify-content: space-between;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 12px 15px;
-    border-radius: 12px;
-    margin-bottom: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
+.chat-channel-box { display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); padding: 12px 15px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s ease; }
 .chat-channel-box:hover { background: rgba(255, 255, 255, 0.08); transform: translateX(3px); border-color: rgba(255, 255, 255, 0.1); }
 .chat-channel-box.active { background: linear-gradient(90deg, rgba(59, 130, 246, 0.15), transparent); border-left: 3px solid var(--primary); border-color: var(--primary); }
 .channel-info { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 13px; color: #cbd5e1; }
 .channel-icon { width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
-
 .team-members-list { margin-left: 20px; padding-left: 15px; border-left: 2px solid rgba(255,255,255,0.05); margin-bottom: 15px; margin-top: -5px; }
 .team-member-item { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 12px; color: var(--text-muted); transition: 0.2s; }
 .team-member-item:hover { color: white; }
-.team-member-avatar-small { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); }
-
-/* FORM ELEMANLARI */
+.team-member-avatar-small { width: 24px !important; height: 24px !important; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); }
 input, textarea, select { width: 100%; padding: 16px 20px; background: rgba(0,0,0,0.3); border: 2px solid var(--border); color: white; border-radius: var(--radius-md); font-family: inherit; font-weight: 600; margin-bottom: 15px; }
 .btn { padding: 14px 28px; border-radius: 50px; font-weight: 700; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; }
 .btn-primary { background: var(--primary); color: white; }
 .btn-outline { border: 2px solid var(--border); color: var(--text-main); background: transparent; }
-
-/* ALT BİLGİ (FOOTER) & MINI CHAT */
 footer { margin-top: auto; padding: 50px 0 30px 0; text-align: center; border-top: 1px solid var(--border); background: #02040a; font-size: 14px; color: var(--text-muted); }
 .footer-links { display: flex; justify-content: center; gap: 40px; margin-bottom: 30px; }
 .footer-links a { color: #cbd5e1; text-decoration: none; font-weight: 600; transition: 0.3s; font-size: 14px; }
 .footer-links a:hover { color: var(--primary); }
-
 .mini-chat-btn { position: fixed; bottom: 35px; right: 35px; width: 75px; height: 75px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 9999; box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4); border: 4px solid rgba(255,255,255,0.1); transition: all 0.4s; overflow: hidden; }
 .mini-chat-btn:hover { transform: scale(1.15); border-color: var(--primary); }
 .mini-chat-avatar { width: 100%; height: 100%; object-fit: cover; display: block; }
 .mini-chat-box { position: fixed; bottom: 120px; right: 35px; width: 400px; height: 650px; background: var(--bg-darker); border: 1px solid var(--border); border-radius: var(--radius-xl); z-index: 9999; display: none; flex-direction: column; overflow: hidden; box-shadow: 0 30px 100px rgba(0,0,0,0.9); }
 .badge-float { position: absolute; top: 0; right: 0; background: var(--danger); color: white; font-size: 14px; font-weight: 800; min-width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #0f172a; z-index: 5; }
-
-/* ANİMASYONLAR */
-@keyframes pulse-neon { 0% { text-shadow: 0 0 10px var(--primary), 2px 2px 0px #000; transform: scale(1); } 50% { text-shadow: 0 0 20px var(--primary), 2px 2px 0px #000; transform: scale(1.1); } 100% { text-shadow: 0 0 10px var(--primary), 2px 2px 0px #000; transform: scale(1); } }
 .friend-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px; margin-top: 20px; }
 .friend-mini-card { background: var(--bg-floating); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 15px; text-align: center; transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
 .friend-mini-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2); }
-.friend-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); margin-bottom: 10px; }
-
-.sidebar-profile-img,
-.profile-avatar-img,
-.chat-sidebar img,
-.chat-input-area img,
-.team-member-avatar-small,
-.friend-avatar,
-.mini-chat-avatar,
-img[style*="border-radius:50%"],
-img[style*="border-radius: 50%"] {
-    object-fit: cover !important;
-}
+@keyframes pulse-neon { 0% { text-shadow: 0 0 10px var(--primary), 2px 2px 0px #000; transform: scale(1); } 50% { text-shadow: 0 0 20px var(--primary), 2px 2px 0px #000; transform: scale(1.1); } 100% { text-shadow: 0 0 10px var(--primary), 2px 2px 0px #000; transform: scale(1); } }
+@keyframes pulse-border { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
