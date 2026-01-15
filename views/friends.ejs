@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 
-                <div class="section-title" style="margin-left:0;">Operasyon Merkezi</div>
+                <div class="section-title" style="margin-left:0;">Hızlı Erişim</div>
                 <div class="sidebar-menu" style="display:flex; flex-direction:column; gap:8px;">
                     <a href="/chat" class="sidebar-item-card">
                         <span class="sidebar-item-title"><i class="fas fa-comments"></i> Mesajlar</span>
@@ -28,7 +28,6 @@
                                 <span class="sidebar-item-title"><i class="fas fa-shield-alt" style="color:var(--accent);"></i> <%= g.name %></span>
                                 <span class="sidebar-item-badge"><%= g.memberCount %></span>
                             </div>
-                            
                             <div style="display:flex; gap:5px; flex-wrap:wrap;">
                                 <% if(g.members && g.members.length > 0) { %>
                                     <% g.members.forEach(m => { %>
@@ -47,7 +46,7 @@
         <div>
             <% if(requests.length > 0) { %>
                 <div class="card" style="border: 2px solid var(--accent); background: rgba(245, 158, 11, 0.05) !important; animation: pulse-border 2s infinite;">
-                    <h3 style="color:var(--accent); margin-top:0;"><i class="fas fa-bell"></i> Operasyon Çağrıları (İstekler)</h3>
+                    <h3 style="color:var(--accent); margin-top:0;"><i class="fas fa-bell"></i> Bekleyen İstekler</h3>
                     <div style="display:flex; flex-direction:column; gap:10px;">
                         <% requests.forEach(r => { %>
                             <div class="sidebar-item-card" style="background:var(--bg-floating) !important;">
@@ -67,9 +66,9 @@
             <% } %>
 
             <div class="card">
-                <h3><i class="fas fa-search" style="color:var(--primary); margin-right:10px;"></i> Ajan Bul</h3>
+                <h3><i class="fas fa-search" style="color:var(--primary); margin-right:10px;"></i> Oyuncu Bul</h3>
                 <div style="display:flex; gap:15px;">
-                    <input type="text" id="userSearch" placeholder="Ajan ismi girin..." onkeyup="searchUser()" style="margin:0; flex:1;">
+                    <input type="text" id="userSearch" placeholder="Oyuncu ismi girin..." onkeyup="searchUser()" style="margin:0; flex:1;">
                 </div>
                 <div id="searchResults" style="margin-top:20px; display:flex; flex-direction:column; gap:10px;"></div>
             </div>
@@ -88,17 +87,6 @@
                                     <strong style="color:var(--accent);"><%= g.name %></strong>
                                     <span style="font-size:11px; opacity:0.6;"><%= g.memberCount %> Üye</span>
                                 </div>
-                                
-                                <div style="margin:10px 0; display:flex; gap:5px; flex-wrap:wrap;">
-                                    <% if(g.members && g.members.length > 0) { %>
-                                        <% g.members.forEach(m => { %>
-                                            <div title="<%= m.username %>" style="width:25px; height:25px; border-radius:50%; overflow:hidden; border:1px solid rgba(255,255,255,0.3);">
-                                                <img src="<%= m.avatar || '/img/default_avatar.png' %>" style="width:100%; height:100%; object-fit:cover;">
-                                            </div>
-                                        <% }) %>
-                                    <% } %>
-                                </div>
-
                                 <form action="/groups/add-member" method="POST" style="margin-top:10px; display:flex; gap:5px;">
                                     <input type="hidden" name="groupId" value="<%= g.id %>">
                                     <select name="memberId" style="margin:0; font-size:11px; padding:8px;">
@@ -113,7 +101,7 @@
                         <% }) %>
                     </div>
                 <% } else { %>
-                    <p style="opacity:0.6;">Timin yok. Sağ üstten kurabilirsin.</p>
+                    <p style="opacity:0.6;">Timin yok.</p>
                 <% } %>
             </div>
 
@@ -153,7 +141,6 @@
 
 <script>
     const myPendingIds = [<%= (typeof myPendingIds !== 'undefined' ? myPendingIds.join(',') : '') %>];
-    
     async function searchUser() {
         const q = document.getElementById('userSearch').value;
         const div = document.getElementById('searchResults');
