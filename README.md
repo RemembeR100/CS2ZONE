@@ -1,7 +1,7 @@
 # CS2ZONE - Player Community Platform
 
 ## 🌐 Live Demo
-**Access the live application here:** [CS2ZONE Live Website](https://cs2zone-tr.onrender.com)
+**Access the live application here:** [CS2ZONE Live Website](https://cs2zone.onrender.com)
 
 > **Note:** The application is hosted on Render's free tier. If the site has been inactive for 15 minutes, the server will go to sleep. It may take up to 1-2 minutes for the initial load when waking up. Furthermore, due to the ephemeral file system of the free tier, the local SQLite database resets upon every server restart.
 
@@ -27,7 +27,7 @@ CS2ZONE is a comprehensive, full-stack web application designed specifically for
 # CS2ZONE - Oyuncu Topluluk Platformu
 
 ## 🌐 Canlı Demo
-**Uygulamaya buradan erişebilirsiniz:** [CS2ZONE Canlı Web Sitesi](https://cs2zone-tr.onrender.com)
+**Uygulamaya buradan erişebilirsiniz:** [CS2ZONE Canlı Web Sitesi](https://cs2zone.onrender.com)
 
 > **Not:** Uygulama Render'ın ücretsiz planında barındırılmaktadır. Site 15 dakika boyunca aktif olmazsa sunucu uyku moduna geçer. Bu nedenle ilk açılış 1-2 dakika sürebilir. Ayrıca, ücretsiz planın geçici dosya sistemi nedeniyle, yerel SQLite veritabanı sunucu her yeniden başlatıldığında sıfırlanmaktadır.
 
